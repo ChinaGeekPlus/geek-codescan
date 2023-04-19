@@ -1,4 +1,3 @@
-const config = require('./config');
 const process = require("child_process");
 const { curly } = require("node-libcurl");
 const tls = require('tls')
@@ -7,6 +6,17 @@ const path = require('path')
 
 const certFilePath = path.join(__dirname, 'cert.pem')
 const npmregistryUrl = "https://registry.npmjs.org/"
+
+// 读取当前目录下的config.json文件, 如果没有则创建
+if (!fs.existsSync(path.join(__dirname, 'config.json'))) {
+  fs.writeFileSync(path.join(__dirname, 'config.json'), JSON.stringify({
+    wchatRobotToken: '',
+    logFile: ''
+  }))
+}
+
+const config = require('./config.json');
+
 /**
  * 创建证书文件
  */
