@@ -1,0 +1,23 @@
+{
+  "name": "geek-codescan",
+  "version": "0.0.1",
+  "description": "geek+ npm包审查工具",
+  "main": "index.js",
+  "scripts": {
+    "test": "gcs run"
+  },
+  "bin": {
+    "gcs": "cmd.js"
+  },
+  "keywords": [
+    "geek"
+  ],
+  "author": "mengtao.shen@geekplus.com",
+  "license": "ISC",
+  "devDependencies": {
+    "commander": "^10.0.1"
+  },
+  "dependencies": {
+    "node-libcurl": "^3.0.0"
+  }
+}
