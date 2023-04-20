@@ -1,5 +1,6 @@
-const { program } = require('commander');
-const cmdFn = require('./index');
+import { program } from 'commander';
+import cmdFn from './index';
+
 program
   .name('geek-codeScan')
   .description([
@@ -31,5 +32,4 @@ program
 program.parse(process.argv);
 
 
-
-module.exports = cmdFn
+export default cmdFn;

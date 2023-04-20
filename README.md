@@ -1,6 +1,17 @@
 # geek-codescan
 geek + npm审查工具
 
+### 安装
+如果需要使用命令行请全局安装该插件
+```
+npm install -g geek-codescan
+```
+
+如果仅用于本地`import`使用则使用
+```
+npm install geek-codescan
+```
+
 ### 配置项
 执行`gcs config <setKey> <setValue>`来设置一些通用配置内容, 如
 ```
