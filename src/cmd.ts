@@ -30,6 +30,3 @@ program
 
 //解析用户传入的命令
 program.parse(process.argv);
-
-
-export default cmdFn;

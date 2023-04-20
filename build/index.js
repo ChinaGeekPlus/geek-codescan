@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -36,11 +59,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var process = require("child_process");
-var node_libcurl_1 = require("node-libcurl");
-var tls = require("tls");
-var fs = require("fs");
-var path = require("path");
+var process = __importStar(require("child_process"));
+var tls = __importStar(require("tls"));
+var fs = __importStar(require("fs"));
+var path = __importStar(require("path"));
+var https = __importStar(require("https"));
 var certFilePath = path.join(__dirname, "cert.pem");
 var npmregistryUrl = "https://registry.npmjs.org/";
 // 读取当前目录下的config.json文件, 如果没有则创建
@@ -170,22 +193,21 @@ function runAuditSync() {
                                 // 存在token则发送消息
                                 if (config.wchatRobotToken) {
                                     createPem();
-                                    node_libcurl_1.curly
-                                        .post("https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=".concat(config.wchatRobotToken), {
-                                        postFields: JSON.stringify(option),
-                                        httpHeader: ["Content-Type: application/json"],
-                                        caInfo: certFilePath,
-                                        verbose: true,
-                                    })
-                                        .then(function (_a) {
-                                        var statusCode = _a.statusCode, data = _a.data, headers = _a.headers;
-                                        removePem();
-                                        resolve(data);
-                                    })
-                                        .catch(function (e) {
-                                        console.log(e);
-                                        reject(e);
+                                    var req = https.request({
+                                        protocol: "https:",
+                                        hostname: "qyapi.weixin.qq.com",
+                                        path: "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=".concat(config.wchatRobotToken),
+                                        port: 443,
+                                        method: "POST",
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                    }, function (res) { })
+                                        .on("error", function (err) {
+                                        console.log("Error: ", err.message);
                                     });
+                                    req.write(JSON.stringify(option));
+                                    req.end();
                                 }
                                 else {
                                     resolve({});

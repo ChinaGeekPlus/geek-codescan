@@ -1,7 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var commander_1 = require("commander");
-var index_1 = require("./index");
+var index_1 = __importDefault(require("./index"));
 commander_1.program
     .name('geek-codeScan')
     .description([
@@ -28,4 +31,3 @@ commander_1.program
 });
 //解析用户传入的命令
 commander_1.program.parse(process.argv);
-exports.default = index_1.default;

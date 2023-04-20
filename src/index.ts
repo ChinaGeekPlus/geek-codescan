@@ -1,8 +1,8 @@
 import * as process from "child_process";
-import { curly } from "node-libcurl";
 import * as tls from "tls";
 import * as fs from "fs";
 import * as path from "path";
+import * as https from "https";
 
 const certFilePath = path.join(__dirname, "cert.pem");
 const npmregistryUrl = "https://registry.npmjs.org/";
@@ -146,24 +146,23 @@ async function runAuditSync() {
           // 存在token则发送消息
           if (config.wchatRobotToken) {
             createPem();
-            curly
-              .post(
-                `https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${config.wchatRobotToken}`,
+            const req = https.request(
                 {
-                  postFields: JSON.stringify(option),
-                  httpHeader: ["Content-Type: application/json"],
-                  caInfo: certFilePath,
-                  verbose: true,
-                }
+                  protocol: "https:",
+                  hostname: "qyapi.weixin.qq.com",
+                  path: `https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=${config.wchatRobotToken}`,
+                  port: 443,
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                }, (res) => {}
               )
-              .then(({ statusCode, data, headers }) => {
-                removePem();
-                resolve(data);
-              })
-              .catch((e) => {
-                console.log(e);
-                reject(e);
+              .on("error", (err) => {
+                console.log("Error: ", err.message);
               });
+            req.write(JSON.stringify(option));
+            req.end();
           } else {
             resolve({});
           }
@@ -216,4 +215,4 @@ async function setConfig(name, cmd) {
   });
 }
 
-export default { ready, setConfig }
+export default { ready, setConfig };

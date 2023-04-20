@@ -1,6 +1,6 @@
 {
   "name": "geek-codescan",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "description": "geek+ npm包审查工具",
   "main": "build/index.js",
   "scripts": {
@@ -15,8 +15,7 @@
   "author": "mengtao.shen@geekplus.com",
   "license": "ISC",
   "dependencies": {
-    "commander": "^10.0.1",
-    "node-libcurl": "^3.0.0"
+    "commander": "^10.0.1"
   },
   "devDependencies": {
     "@types/node": "^18.15.12"
