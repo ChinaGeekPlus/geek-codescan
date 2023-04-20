@@ -1,12 +1,12 @@
 import * as process from "child_process";
-import * as tls from "tls";
 import * as fs from "fs";
 import * as path from "path";
 import * as https from "https";
 
-const certFilePath = path.join(__dirname, "cert.pem");
 const npmregistryUrl = "https://registry.npmjs.org/";
+const pathUrl = path.resolve('./');
 
+let config = { logFile: '', wchatRobotToken: '' }
 // 读取当前目录下的config.json文件, 如果没有则创建
 if (!fs.existsSync(path.join(__dirname, "config.json"))) {
   fs.writeFileSync(
@@ -16,24 +16,12 @@ if (!fs.existsSync(path.join(__dirname, "config.json"))) {
       logFile: "",
     })
   );
+  
+  config = require(path.join(__dirname, "config.json"));
+} else {
+  config = require(path.join(__dirname, "config.json"));
 }
 
-const config = require("../config.json");
-
-/**
- * 创建证书文件
- */
-function createPem() {
-  const tlsData = tls.rootCertificates.join("\n");
-  fs.writeFileSync(certFilePath, tlsData);
-}
-
-/**
- * 删除证书文件
- */
-function removePem() {
-  fs.unlinkSync(certFilePath);
-}
 
 /**
  * 获取npm的registry
@@ -105,7 +93,7 @@ async function runAuditSync() {
           });
 
           fs.writeFile(
-            config.logFile || path.join(__dirname, "auditReport.log"),
+            config.logFile || path.join(pathUrl, "auditReport.log"),
             stdout,
             (err) => {
               if (err) {
@@ -145,7 +133,6 @@ async function runAuditSync() {
 
           // 存在token则发送消息
           if (config.wchatRobotToken) {
-            createPem();
             const req = https.request(
                 {
                   protocol: "https:",
@@ -203,7 +190,7 @@ async function ready() {
 }
 
 async function setConfig(name, cmd) {
-  fs.readFile(path.join(__dirname, "./config.json"), (err, data) => {
+  fs.readFile(path.join(pathUrl, "./config.json"), (err, data) => {
     if (err) {
       console.log("读取配置文件失败");
       return;
