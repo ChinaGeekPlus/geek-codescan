@@ -1,6 +1,6 @@
 {
   "name": "geek-codescan",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "description": "geek+ npm包审查工具",
   "main": "build/index.js",
   "scripts": {
